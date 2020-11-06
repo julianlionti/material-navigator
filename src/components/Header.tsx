@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
+import { Divider, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar'
-import Badge from '@material-ui/core/Badge'
 import IconButton from '@material-ui/core/IconButton'
 import InputBase from '@material-ui/core/InputBase'
 import Menu from '@material-ui/core/Menu'
@@ -8,172 +8,136 @@ import MenuItem from '@material-ui/core/MenuItem'
 import { fade, makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import {
-  FaEnvelope,
-  FaHamburger,
-  FaPersonBooth,
-  FaPlus,
-  FaSearch,
-  FaSoundcloud
-} from 'react-icons/fa'
+import { Autocomplete } from '@material-ui/lab'
+import { FaHamburger, FaSearch, FaUser } from 'react-icons/fa'
+import { useHistory } from 'react-router-dom'
 import { useLang, useNavigator } from '../utils/NavigatorContext'
 
 export default () => {
-  const { title } = useNavigator()
+  const {
+    menu,
+    title,
+    toggleMenu,
+    drawer,
+    drawerWidth,
+    withSearch,
+    showUser,
+    userMenu,
+    userIcon
+  } = useNavigator()
   const lang = useLang()
-  const classes = useClasses()
+  const classes = useClasses({ drawerWidth })
+  const history = useHistory()
 
   const [anchorEl, setAnchorEl] = useState(null)
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null)
-
-  const isMenuOpen = Boolean(anchorEl)
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl)
 
   const handleProfileMenuOpen = useCallback((event: any) => {
     setAnchorEl(event.currentTarget)
   }, [])
 
-  const handleMobileMenuClose = useCallback(() => {
-    setMobileMoreAnchorEl(null)
-  }, [])
-
   const handleMenuClose = useCallback(() => {
     setAnchorEl(null)
-    handleMobileMenuClose()
-  }, [handleMobileMenuClose])
-
-  const handleMobileMenuOpen = useCallback((event: any) => {
-    setMobileMoreAnchorEl(event.currentTarget)
   }, [])
 
-  const menuId = 'primary-search-account-menu'
   const renderMenu = useCallback(
     () => (
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={menuId}
         keepMounted
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
+        open={!!anchorEl}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        {userMenu
+          ?.filter((e) => !e.hidden)
+          .map(({ id, title, icon, onPress, keepOpen }, i) => {
+            if (!id || !title || !onPress) return <Divider key={i} />
+            return (
+              <MenuItem
+                key={id}
+                onClick={() => {
+                  onPress()
+                  if (keepOpen) return
+                  handleMenuClose()
+                }}
+              >
+                {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                <ListItemText>{title}</ListItemText>
+              </MenuItem>
+            )
+          })}
       </Menu>
     ),
-    [anchorEl, handleMenuClose, isMenuOpen]
-  )
-
-  const mobileMenuId = 'primary-search-account-menu-mobile'
-  const renderMobileMenu = useCallback(
-    () => (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={mobileMenuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={handleMobileMenuClose}
-      >
-        <MenuItem>
-          <IconButton aria-label='show 4 new mails' color='inherit'>
-            <Badge badgeContent={4} color='secondary'>
-              <FaEnvelope />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton aria-label='show 11 new notifications' color='inherit'>
-            <Badge badgeContent={11} color='secondary'>
-              <FaSoundcloud />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem>
-        <MenuItem onClick={handleProfileMenuOpen}>
-          <IconButton
-            aria-label='account of current user'
-            aria-controls='primary-search-account-menu'
-            aria-haspopup='true'
-            color='inherit'
-          >
-            <FaPersonBooth />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Menu>
-    ),
-    [
-      handleMobileMenuClose,
-      handleProfileMenuOpen,
-      isMobileMenuOpen,
-      mobileMoreAnchorEl
-    ]
+    [anchorEl, handleMenuClose, userMenu]
   )
 
   return (
     <div className={classes.grow}>
-      <AppBar position='static'>
+      <AppBar position='fixed' className={`${classes.appBar} ${drawer ? classes.appBarShift : ''}`}>
         <Toolbar>
           <IconButton
+            onClick={() => toggleMenu()}
             edge='start'
-            className={classes.menuButton}
+            className={`${classes.menuButton} ${drawer ? classes.hide : ''}`}
             color='inherit'
           >
             <FaHamburger />
           </IconButton>
           <Typography className={classes.title} variant='h6' noWrap>
-            {title || 'Material-Navigator'}
+            {title}
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <FaSearch />
+          {withSearch && (
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <FaSearch />
+              </div>
+              <Autocomplete
+                freeSolo
+                disableClearable
+                options={menu.filter((e) => e.title)}
+                getOptionLabel={(e) => e.title || ''}
+                renderOption={({ route, title, description }) => (
+                  <ListItem
+                    dense
+                    component='div'
+                    onClick={() => {
+                      if (route) {
+                        history.push(route)
+                      }
+                    }}
+                  >
+                    <ListItemText primary={title} secondary={description} />
+                  </ListItem>
+                )}
+                renderInput={(params) => (
+                  <div ref={params.InputProps.ref} className={classes.autoRoot}>
+                    <InputBase
+                      {...params.inputProps}
+                      placeholder={lang.search}
+                      classes={{ root: classes.inputRoot, input: classes.inputInput }}
+                      type='search'
+                    />
+                  </div>
+                )}
+              />
             </div>
-            <InputBase
-              placeholder={lang.search}
-              classes={{ root: classes.inputRoot, input: classes.inputInput }}
-            />
-          </div>
+          )}
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton color='inherit'>
-              <Badge badgeContent={0} color='secondary'>
-                <FaEnvelope />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label='show 17 new notifications' color='inherit'>
+          <div>
+            {/* <IconButton color='inherit'>
               <Badge badgeContent={17} color='secondary'>
                 <FaSoundcloud />
               </Badge>
-            </IconButton>
-            <IconButton
-              edge='end'
-              aria-label='account of current user'
-              aria-controls={menuId}
-              aria-haspopup='true'
-              onClick={handleProfileMenuOpen}
-              color='inherit'
-            >
-              <FaPersonBooth />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label='show more'
-              aria-controls={mobileMenuId}
-              aria-haspopup='true'
-              onClick={handleMobileMenuOpen}
-              color='inherit'
-            >
-              <FaPlus />
-            </IconButton>
+            </IconButton> */}
+            {showUser && (
+              <IconButton edge='end' onClick={handleProfileMenuOpen} color='inherit'>
+                {userIcon || <FaUser />}
+              </IconButton>
+            )}
           </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu()}
       {renderMenu()}
     </div>
   )
@@ -183,13 +147,31 @@ const useClasses = makeStyles((theme) => ({
   grow: {
     flexGrow: 1
   },
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: ({ drawerWidth }: any) => ({
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  }),
   menuButton: {
     marginRight: theme.spacing(2)
+  },
+  hide: {
+    display: 'none'
   },
   title: {
     display: 'none',
     [theme.breakpoints.up('sm')]: {
-      display: 'block'
+      display: 'block',
+      width: 150
     }
   },
   search: {
@@ -216,29 +198,19 @@ const useClasses = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  autoRoot: {
+    width: '100%'
+  },
   inputRoot: {
     color: 'inherit'
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: '20ch'
-    }
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex'
-    }
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none'
     }
   }
 }))

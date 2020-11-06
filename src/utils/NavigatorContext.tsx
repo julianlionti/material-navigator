@@ -10,10 +10,16 @@ import React, {
 import { Translations } from '../translate'
 import { esAR } from '../translate/es_AR'
 
-interface SharedProps {
+export interface SharedProps {
   routes: RouteProps[]
   menu: MenuProps[]
   lang: Translations
+  title: string
+  drawerWidth?: number
+  withSearch?: boolean
+  showUser?: boolean
+  userMenu?: UserMenuProps[]
+  userIcon?: ReactNode
 }
 
 interface ProviderProps extends SharedProps {
@@ -26,20 +32,26 @@ export interface RouteProps {
 }
 
 export interface MenuProps {
-  id: string
-  title: string
+  route?: string
+  title?: string
+  icon?: ReactNode
+  description?: string
+  onPress?: () => void
+  hidden?: boolean
+}
+
+type NoRouteMenu = Omit<MenuProps, 'route'>
+export interface UserMenuProps extends NoRouteMenu {
+  id?: string
+  keepOpen?: boolean
 }
 
 interface State extends SharedProps {
-  title?: string
   drawer: boolean
   right?: boolean
 }
 
-type Action =
-  | { type: 'MENU'; open: boolean }
-  | { type: 'TITLE'; title: string }
-  | { type: 'RIGHT' }
+type Action = { type: 'MENU'; open: boolean } | { type: 'TITLE'; title: string } | { type: 'RIGHT' }
 
 interface ContextProps {
   state: State
@@ -48,9 +60,11 @@ interface ContextProps {
 
 const initialState = {
   drawer: false,
+  drawerWidth: 240,
   menu: [],
   routes: [],
-  lang: esAR
+  lang: esAR,
+  title: 'Material Navigator'
 }
 
 const initialValue: ContextProps = {
@@ -68,7 +82,6 @@ const reducer = (state: State, action: Action): State => {
         drawer: action.open
       }
     case 'TITLE':
-      console.log(action)
       return {
         ...state,
         title: action.title
@@ -79,23 +92,12 @@ const reducer = (state: State, action: Action): State => {
 }
 
 export const NavigatorProvider = (props: ProviderProps) => {
-  const { children, menu, routes, lang } = props
-  const [state, dispatch] = useReducer(reducer, {
-    ...initialState,
-    menu,
-    routes,
-    lang
-  })
+  const { children, ...providerProps } = props
+  const [state, dispatch] = useReducer(reducer, { ...initialState, ...providerProps })
 
   return (
-    <NavigatorContext.Provider value={{ state, dispatch }}>
-      {children}
-    </NavigatorContext.Provider>
+    <NavigatorContext.Provider value={{ state, dispatch }}>{children}</NavigatorContext.Provider>
   )
-}
-
-interface UseNavigatorProps {
-  title: string
 }
 
 export const useLang = () => {
@@ -103,8 +105,12 @@ export const useLang = () => {
   return state.lang
 }
 
-export const useNavigator = (props?: UseNavigatorProps) => {
-  const { state, dispatch } = useContext(NavigatorContext)
+interface UseTitleProps {
+  title: string
+}
+
+export const useTitle = (props: UseTitleProps) => {
+  const { dispatch } = useContext(NavigatorContext)
   const { title } = props || {}
 
   useEffect(() => {
@@ -112,9 +118,14 @@ export const useNavigator = (props?: UseNavigatorProps) => {
       dispatch({ type: 'TITLE', title })
     }
   }, [dispatch, title])
+}
 
-  const toggleMenu = useCallback((open) => dispatch({ type: 'MENU', open }), [
-    dispatch
-  ])
+export const useNavigator = () => {
+  const { state, dispatch } = useContext(NavigatorContext)
+
+  const toggleMenu = useCallback(
+    (open?: boolean) => dispatch({ type: 'MENU', open: open || !state.drawer }),
+    [dispatch, state.drawer]
+  )
   return { ...state, toggleMenu }
 }

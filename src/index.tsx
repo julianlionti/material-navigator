@@ -1,5 +1,5 @@
-import { createMenu, createRoutes } from './components/Navigator'
+import { createMenu, createRoutes, createUserMenu } from './components/Navigator'
 import Navigator from './components/WithProvider'
-import { useNavigator } from './utils/NavigatorContext'
+import { useNavigator, useTitle } from './utils/NavigatorContext'
 
-export { Navigator, createMenu, createRoutes, useNavigator }
+export { Navigator, createMenu, createRoutes, createUserMenu, useNavigator, useTitle }

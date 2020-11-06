@@ -26,6 +26,7 @@
   },
   "peerDependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-icons": "^3.11.0",
@@ -59,14 +60,12 @@
     "microbundle-crl": "^0.13.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
-    "typescript": "^3.7.5"
+    "typescript": "^3.9.7"
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
-  }
+  ]
 }
