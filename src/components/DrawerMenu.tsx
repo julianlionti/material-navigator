@@ -14,8 +14,8 @@ import { useHistory } from 'react-router-dom'
 import { useNavigator } from '../utils/NavigatorContext'
 
 export default () => {
-  const { drawerWidth, drawer, toggleMenu, menu } = useNavigator()
-  const classes = useClasses({ drawerWidth })
+  const { menuDrawerWidth, drawer, toggleMenu, menu } = useNavigator()
+  const classes = useClasses({ drawerWidth: menuDrawerWidth })
   const history = useHistory()
   return (
     <Drawer
@@ -59,11 +59,17 @@ export default () => {
 
 const useClasses = makeStyles((theme) => ({
   drawer: ({ drawerWidth }: any) => ({
-    width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0,
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth
+    },
+    width: '100%'
   }),
   drawerPaper: ({ drawerWidth }: any) => ({
-    width: drawerWidth
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth
+    },
+    width: '100%'
   }),
   drawerHeader: {
     display: 'flex',

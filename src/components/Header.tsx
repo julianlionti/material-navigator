@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Divider, ListItem, ListItemIcon, ListItemText } from '@material-ui/core'
+import { Badge, Divider, ListItem, ListItemIcon, ListItemText, Tooltip } from '@material-ui/core'
 import AppBar from '@material-ui/core/AppBar'
 import IconButton from '@material-ui/core/IconButton'
 import InputBase from '@material-ui/core/InputBase'
@@ -19,14 +19,15 @@ export default () => {
     title,
     toggleMenu,
     drawer,
-    drawerWidth,
+    menuDrawerWidth,
     withSearch,
     showUser,
     userMenu,
-    userIcon
+    userIcon,
+    extraIcons
   } = useNavigator()
   const lang = useLang()
-  const classes = useClasses({ drawerWidth })
+  const classes = useClasses({ drawerWidth: menuDrawerWidth })
   const history = useHistory()
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -125,11 +126,15 @@ export default () => {
           )}
           <div className={classes.grow} />
           <div>
-            {/* <IconButton color='inherit'>
-              <Badge badgeContent={17} color='secondary'>
-                <FaSoundcloud />
-              </Badge>
-            </IconButton> */}
+            {extraIcons?.map(({ tooltip, badgeCount, icon, id }) => (
+              <Tooltip title={tooltip || ''} key={id}>
+                <IconButton color='inherit'>
+                  <Badge badgeContent={badgeCount} color='secondary'>
+                    {icon}
+                  </Badge>
+                </IconButton>
+              </Tooltip>
+            ))}
             {showUser && (
               <IconButton edge='end' onClick={handleProfileMenuOpen} color='inherit'>
                 {userIcon || <FaUser />}

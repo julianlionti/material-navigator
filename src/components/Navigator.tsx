@@ -1,17 +1,25 @@
 import React from 'react'
 import { CssBaseline, makeStyles } from '@material-ui/core'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
-import { MenuProps, RouteProps, useNavigator, UserMenuProps } from '../utils/NavigatorContext'
+import {
+  IconsProps,
+  MenuProps,
+  RouteProps,
+  useNavigator,
+  UserMenuProps
+} from '../utils/NavigatorContext'
 import DrawerMenu from './DrawerMenu'
+import DrawerRight from './DrawerRight'
 import Header from './Header'
 
 export const createMenu = (props: MenuProps[]) => props
 export const createUserMenu = (props: UserMenuProps[]) => props
 export const createRoutes = (props: RouteProps[]) => props
+export const createExtraIcons = (props: IconsProps[]) => props
 
 export default () => {
-  const { routes, drawer, drawerWidth } = useNavigator()
-  const classes = useClasses({ drawerWidth })
+  const { routes, drawer, menuDrawerWidth } = useNavigator()
+  const classes = useClasses({ drawerWidth: menuDrawerWidth })
 
   return (
     <BrowserRouter>
@@ -19,6 +27,7 @@ export default () => {
         <CssBaseline />
         <Header />
         <DrawerMenu />
+        <DrawerRight />
         <main className={`${classes.content} ${drawer ? classes.contentShift : ''}`}>
           <div className={classes.drawerHeader} />
           <Switch>

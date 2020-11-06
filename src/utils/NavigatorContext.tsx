@@ -15,11 +15,14 @@ export interface SharedProps {
   menu: MenuProps[]
   lang: Translations
   title: string
-  drawerWidth?: number
   withSearch?: boolean
   showUser?: boolean
   userMenu?: UserMenuProps[]
   userIcon?: ReactNode
+  extraIcons?: IconsProps[]
+  menuDrawerWidth?: number
+  rightDrawerWidth?: number
+  rightComponent?: () => ReactNode
 }
 
 interface ProviderProps extends SharedProps {
@@ -40,6 +43,13 @@ export interface MenuProps {
   hidden?: boolean
 }
 
+export interface IconsProps {
+  id: string
+  icon: ReactNode
+  badgeCount?: number
+  tooltip?: string
+}
+
 type NoRouteMenu = Omit<MenuProps, 'route'>
 export interface UserMenuProps extends NoRouteMenu {
   id?: string
@@ -51,16 +61,22 @@ interface State extends SharedProps {
   right?: boolean
 }
 
-type Action = { type: 'MENU'; open: boolean } | { type: 'TITLE'; title: string } | { type: 'RIGHT' }
+type Action =
+  | { type: 'MENU'; open: boolean }
+  | { type: 'TITLE'; title: string }
+  | { type: 'RIGHT'; open: boolean }
+  | { type: 'RIGHTCOMPONENT'; component: () => ReactNode }
+  | { type: 'EXTRAICONS'; extraIcons: IconsProps[] }
 
 interface ContextProps {
   state: State
   dispatch: Dispatch<Action>
 }
 
-const initialState = {
+const initialState: State = {
   drawer: false,
-  drawerWidth: 240,
+  menuDrawerWidth: 240,
+  rightDrawerWidth: 240,
   menu: [],
   routes: [],
   lang: esAR,
@@ -85,6 +101,21 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         title: action.title
+      }
+    case 'EXTRAICONS':
+      return {
+        ...state,
+        extraIcons: action.extraIcons
+      }
+    case 'RIGHT':
+      return {
+        ...state,
+        right: action.open
+      }
+    case 'RIGHTCOMPONENT':
+      return {
+        ...state,
+        rightComponent: action.component
       }
     default:
       return state
@@ -120,6 +151,8 @@ export const useTitle = (props: UseTitleProps) => {
   }, [dispatch, title])
 }
 
+type SetExtraActionsProps = (extraActions: IconsProps[]) => IconsProps[]
+
 export const useNavigator = () => {
   const { state, dispatch } = useContext(NavigatorContext)
 
@@ -127,5 +160,24 @@ export const useNavigator = () => {
     (open?: boolean) => dispatch({ type: 'MENU', open: open || !state.drawer }),
     [dispatch, state.drawer]
   )
-  return { ...state, toggleMenu }
+
+  const toggleRightDrawer = useCallback(
+    (open?: boolean) => dispatch({ type: 'RIGHT', open: open || !state.right }),
+    [dispatch, state.right]
+  )
+
+  const setExtraIcons = useCallback(
+    (props: SetExtraActionsProps) => {
+      const extraIcons = props(state.extraIcons || [])
+      dispatch({ type: 'EXTRAICONS', extraIcons })
+    },
+    [dispatch, state.extraIcons]
+  )
+
+  const setRightComponent = useCallback(
+    (component: () => ReactNode) => dispatch({ type: 'RIGHTCOMPONENT', component }),
+    [dispatch]
+  )
+
+  return { ...state, toggleMenu, setExtraIcons, setRightComponent, toggleRightDrawer }
 }
