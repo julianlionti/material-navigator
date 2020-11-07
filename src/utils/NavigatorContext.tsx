@@ -14,15 +14,16 @@ export interface SharedProps {
   routes: RouteProps[]
   menu: MenuProps[]
   lang: Translations
-  title: string
-  withSearch?: boolean
-  showUser?: boolean
+  // withSearch?: boolean
+  // showUser?: boolean
   userMenu?: UserMenuProps[]
   userIcon?: ReactNode
   extraIcons?: IconsProps[]
   menuDrawerWidth?: number
+  menuDrawerIcon?: ReactNode
   rightDrawerWidth?: number
   rightComponent?: () => ReactNode
+  config: UseNavigatorConfig
 }
 
 interface ProviderProps extends SharedProps {
@@ -63,7 +64,7 @@ interface State extends SharedProps {
 
 type Action =
   | { type: 'MENU'; open: boolean }
-  | { type: 'TITLE'; title: string }
+  | { type: 'CONFIG'; config: UseNavigatorConfig }
   | { type: 'RIGHT'; open: boolean }
   | { type: 'RIGHTCOMPONENT'; component: () => ReactNode }
   | { type: 'EXTRAICONS'; extraIcons: IconsProps[] }
@@ -80,7 +81,7 @@ const initialState: State = {
   menu: [],
   routes: [],
   lang: esAR,
-  title: 'Material Navigator'
+  config: { title: 'Material Navigator' }
 }
 
 const initialValue: ContextProps = {
@@ -97,10 +98,13 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         drawer: action.open
       }
-    case 'TITLE':
+    case 'CONFIG':
       return {
         ...state,
-        title: action.title
+        config: {
+          ...state.config,
+          ...action.config
+        }
       }
     case 'EXTRAICONS':
       return {
@@ -136,19 +140,27 @@ export const useLang = () => {
   return state.lang
 }
 
-interface UseTitleProps {
-  title: string
+interface UseNavigatorConfig {
+  title?: string
+  showUser?: boolean
+  noDrawerMenu?: boolean
+  noSearch?: boolean
+  onlyTitle?: boolean // Lo mismo que las 3 de arriba activadas juntas
 }
 
-export const useTitle = (props: UseTitleProps) => {
-  const { dispatch } = useContext(NavigatorContext)
-  const { title } = props || {}
+export const useNavigatorConfig = (props?: UseNavigatorConfig) => {
+  const { state, dispatch } = useContext(NavigatorContext)
+  const { title, noDrawerMenu, noSearch, showUser, onlyTitle } = props || {}
 
   useEffect(() => {
-    if (title) {
-      dispatch({ type: 'TITLE', title })
+    const config = { title, noDrawerMenu, noSearch, showUser, onlyTitle }
+    if (title || noDrawerMenu || noSearch || showUser || onlyTitle) {
+      Object.keys(config).forEach((key) => config[key] === undefined && delete config[key])
+      dispatch({ type: 'CONFIG', config })
     }
-  }, [dispatch, title])
+  }, [title, noDrawerMenu, noSearch, showUser, onlyTitle, dispatch])
+
+  return state.config
 }
 
 type SetExtraActionsProps = (extraActions: IconsProps[]) => IconsProps[]

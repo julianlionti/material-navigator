@@ -11,21 +11,22 @@ import Typography from '@material-ui/core/Typography'
 import { Autocomplete } from '@material-ui/lab'
 import { FaHamburger, FaSearch, FaUser } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
-import { useLang, useNavigator } from '../utils/NavigatorContext'
+import { useLang, useNavigator, useNavigatorConfig } from '../utils/NavigatorContext'
 
 export default () => {
+  const { title, onlyTitle, showUser, noSearch, noDrawerMenu } = useNavigatorConfig()
+
   const {
     menu,
-    title,
     toggleMenu,
     drawer,
     menuDrawerWidth,
-    withSearch,
-    showUser,
+    menuDrawerIcon,
     userMenu,
     userIcon,
     extraIcons
   } = useNavigator()
+
   const lang = useLang()
   const classes = useClasses({ drawerWidth: menuDrawerWidth })
   const history = useHistory()
@@ -77,18 +78,20 @@ export default () => {
     <div className={classes.grow}>
       <AppBar position='fixed' className={`${classes.appBar} ${drawer ? classes.appBarShift : ''}`}>
         <Toolbar>
-          <IconButton
-            onClick={() => toggleMenu()}
-            edge='start'
-            className={`${classes.menuButton} ${drawer ? classes.hide : ''}`}
-            color='inherit'
-          >
-            <FaHamburger />
-          </IconButton>
+          {!onlyTitle && !noDrawerMenu && (
+            <IconButton
+              onClick={() => toggleMenu()}
+              edge='start'
+              className={`${classes.menuButton} ${drawer ? classes.hide : ''}`}
+              color='inherit'
+            >
+              {menuDrawerIcon || <FaHamburger />}
+            </IconButton>
+          )}
           <Typography className={classes.title} variant='h6' noWrap>
             {title}
           </Typography>
-          {withSearch && (
+          {!onlyTitle && !noSearch && (
             <div className={classes.search}>
               <div className={classes.searchIcon}>
                 <FaSearch />
@@ -135,7 +138,7 @@ export default () => {
                 </IconButton>
               </Tooltip>
             ))}
-            {showUser && (
+            {!onlyTitle && showUser && (
               <IconButton edge='end' onClick={handleProfileMenuOpen} color='inherit'>
                 {userIcon || <FaUser />}
               </IconButton>

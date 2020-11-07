@@ -1,11 +1,11 @@
 import React from 'react'
-import { FaBeer, FaCoffee, FaHome, FaInfo, FaUser } from 'react-icons/fa'
+import { FaBeer, FaCoffee, FaHome, FaInfo, FaStar, FaUser } from 'react-icons/fa'
 import {
   Navigator,
   createMenu,
   createUserMenu,
   createRoutes,
-  useTitle,
+  useNavigatorConfig,
   createExtraIcons,
   useNavigator,
   IconsProps
@@ -13,7 +13,7 @@ import {
 import { Button } from '@material-ui/core'
 
 const Home = () => {
-  useTitle({ title: 'Home' })
+  useNavigatorConfig({ title: 'Home', noSearch: true })
   const { setRightComponent, toggleRightDrawer } = useNavigator()
   return (
     <div>
@@ -35,7 +35,7 @@ const Home = () => {
 }
 
 const AboutUS = () => {
-  useTitle({ title: 'About US' })
+  useNavigatorConfig({ title: 'About US' })
   const { setExtraIcons } = useNavigator()
   return (
     <div>
@@ -104,13 +104,12 @@ const App = () => {
 
   return (
     <Navigator
-      title='Example'
+      config={{ title: 'Example' }}
       menu={menu}
       routes={routes}
-      withSearch
-      showUser={true}
       userMenu={userMenu}
       extraIcons={extraIcons}
+      menuDrawerIcon={<FaStar />}
     />
   )
 }
