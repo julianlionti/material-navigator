@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaBeer, FaCoffee, FaHome, FaInfo, FaStar, FaUser } from 'react-icons/fa'
 import {
   Navigator,
@@ -70,17 +70,19 @@ const User = () => {
 }
 
 const App = () => {
-  const menu = createMenu([
-    { route: '/', title: 'Home', description: 'Home screen', icon: <FaHome size={24} /> },
-    {
-      route: '/about',
-      title: 'About US',
-      description: 'Information about Material Navigator',
-      icon: <FaInfo size={24} />
-    },
-    {},
-    { route: '/user', title: 'User', description: 'User information', icon: <FaUser size={24} /> }
-  ])
+  const [menu, setMenu] = useState(
+    createMenu([
+      { route: '/', title: 'Home', description: 'Home screen', icon: <FaHome size={24} /> },
+      {
+        route: '/about',
+        title: 'About US',
+        description: 'Information about Material Navigator',
+        icon: <FaInfo size={24} />
+      },
+      {},
+      { route: '/user', title: 'User', description: 'User information', icon: <FaUser size={24} /> }
+    ])
+  )
 
   const routes = createRoutes([
     { route: '/', component: <Home /> },
@@ -101,6 +103,12 @@ const App = () => {
       badgeCount: 16
     }
   ])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMenu((menu) => [...menu, { route: '/sarasa', title: 'sarasa' }])
+    }, 1500)
+  }, [])
 
   return (
     <Navigator

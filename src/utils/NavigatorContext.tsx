@@ -9,6 +9,7 @@ import React, {
 } from 'react'
 import { Translations } from '../translate'
 import { esAR } from '../translate/es_AR'
+import usePrevious from './usePrevious'
 
 export interface SharedProps {
   routes: RouteProps[]
@@ -68,6 +69,7 @@ type Action =
   | { type: 'RIGHT'; open: boolean }
   | { type: 'RIGHTCOMPONENT'; component: () => ReactNode }
   | { type: 'EXTRAICONS'; extraIcons: IconsProps[] }
+  | { type: 'ALL'; data: State }
 
 interface ContextProps {
   state: State
@@ -121,6 +123,8 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         rightComponent: action.component
       }
+    case 'ALL':
+      return action.data
     default:
       return state
   }
@@ -128,7 +132,14 @@ const reducer = (state: State, action: Action): State => {
 
 export const NavigatorProvider = (props: ProviderProps) => {
   const { children, ...providerProps } = props
+  const prevState = usePrevious(providerProps)
   const [state, dispatch] = useReducer(reducer, { ...initialState, ...providerProps })
+
+  useEffect(() => {
+    if (Object.entries(prevState || {}).toString() !== Object.entries(providerProps).toString()) {
+      dispatch({ type: 'ALL', data: { ...state, ...providerProps } })
+    }
+  }, [prevState, providerProps, state])
 
   return (
     <NavigatorContext.Provider value={{ state, dispatch }}>{children}</NavigatorContext.Provider>

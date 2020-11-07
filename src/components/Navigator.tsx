@@ -56,7 +56,7 @@ const useClasses = makeStyles((theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
