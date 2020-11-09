@@ -34,14 +34,14 @@ export default () => {
       <List>
         {menu
           .filter((e) => !e.hidden)
-          .map(({ route, title, icon, onPress }, i) => {
+          .map(({ route, title, icon, onClick }, i) => {
             if (!route && !title) return <Divider key={i} />
             return (
               <ListItem
                 button
                 key={title}
                 onClick={() => {
-                  if (onPress && !route) onPress()
+                  if (onClick && !route) onClick(history)
                   if (route) history.push(route)
 
                   toggleMenu(false)

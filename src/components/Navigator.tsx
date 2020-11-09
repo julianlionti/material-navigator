@@ -31,11 +31,13 @@ export default () => {
         <main className={`${classes.content} ${drawer ? classes.contentShift : ''}`}>
           <div className={classes.drawerHeader} />
           <Switch>
-            {routes.map(({ component, route }) => (
-              <Route key={route} path={route} exact={route === '/'}>
-                {component}
-              </Route>
-            ))}
+            {routes
+              .filter((e) => !e.hidden)
+              .map(({ component, route }) => (
+                <Route key={route} path={route} exact={route === '/'}>
+                  {component}
+                </Route>
+              ))}
           </Switch>
         </main>
       </div>

@@ -91,9 +91,9 @@ const App = () => {
   ])
 
   const userMenu = createUserMenu([
-    { id: 'profile', title: 'My Profile', onPress: () => {} },
-    { id: 'about', title: 'About us', onPress: () => {} },
-    { id: 'logout', title: 'Logout', onPress: () => {} }
+    { id: 'profile', title: 'My Profile', onClick: () => {} },
+    { id: 'about', title: 'About us', onClick: () => {} },
+    { id: 'logout', title: 'Logout', onClick: () => {} }
   ])
 
   const extraIcons = createExtraIcons([

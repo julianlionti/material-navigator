@@ -33,6 +33,7 @@ interface ProviderProps extends SharedProps {
 export interface RouteProps {
   route: string
   component: ReactNode
+  hidden?: boolean
 }
 
 export interface MenuProps {
@@ -40,7 +41,7 @@ export interface MenuProps {
   title?: string
   icon?: ReactNode
   description?: string
-  onPress?: () => void
+  onClick?: (history: any) => void
   hidden?: boolean
 }
 
@@ -49,6 +50,7 @@ export interface IconsProps {
   icon: ReactNode
   badgeCount?: number
   tooltip?: string
+  onClick?: () => void
 }
 
 type NoRouteMenu = Omit<MenuProps, 'route'>

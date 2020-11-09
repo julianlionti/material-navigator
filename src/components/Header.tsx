@@ -53,13 +53,13 @@ export default () => {
       >
         {userMenu
           ?.filter((e) => !e.hidden)
-          .map(({ id, title, icon, onPress, keepOpen }, i) => {
-            if (!id || !title || !onPress) return <Divider key={i} />
+          .map(({ id, title, icon, onClick, keepOpen }, i) => {
+            if (!id || !title || !onClick) return <Divider key={i} />
             return (
               <MenuItem
                 key={id}
                 onClick={() => {
-                  onPress()
+                  onClick(history)
                   if (keepOpen) return
                   handleMenuClose()
                 }}
@@ -71,7 +71,7 @@ export default () => {
           })}
       </Menu>
     ),
-    [anchorEl, handleMenuClose, userMenu]
+    [anchorEl, handleMenuClose, history, userMenu]
   )
 
   return (
@@ -129,9 +129,9 @@ export default () => {
           )}
           <div className={classes.grow} />
           <div>
-            {extraIcons?.map(({ tooltip, badgeCount, icon, id }) => (
+            {extraIcons?.map(({ tooltip, badgeCount, icon, id, onClick }) => (
               <Tooltip title={tooltip || ''} key={id}>
-                <IconButton color='inherit'>
+                <IconButton onClick={onClick} color='inherit'>
                   <Badge badgeContent={badgeCount} color='secondary'>
                     {icon}
                   </Badge>
