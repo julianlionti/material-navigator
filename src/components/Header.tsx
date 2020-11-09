@@ -99,7 +99,7 @@ export default () => {
               <Autocomplete
                 freeSolo
                 disableClearable
-                options={menu.filter((e) => e.title)}
+                options={menu.filter((e) => e.title && !e.hidden)}
                 getOptionLabel={(e) => e.title || ''}
                 renderOption={({ route, title, description }) => (
                   <ListItem
