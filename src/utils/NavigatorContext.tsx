@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useReducer
 } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Translations } from '../translate'
 import { esAR } from '../translate/es_AR'
 
@@ -177,6 +178,7 @@ type SetExtraActionsProps = (extraActions: IconsProps[]) => IconsProps[]
 
 export const useNavigator = () => {
   const { state, dispatch } = useContext(NavigatorContext)
+  const history = useHistory()
 
   const toggleMenu = useCallback(
     (open?: boolean) => dispatch({ type: 'MENU', open: open || !state.drawer }),
@@ -201,5 +203,5 @@ export const useNavigator = () => {
     [dispatch]
   )
 
-  return { ...state, toggleMenu, setExtraIcons, setRightComponent, toggleRightDrawer }
+  return { ...state, toggleMenu, setExtraIcons, setRightComponent, toggleRightDrawer, history }
 }
