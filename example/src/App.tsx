@@ -10,7 +10,8 @@ import {
   useNavigator,
   IconsProps
 } from 'material-navigator'
-import { Button } from '@material-ui/core'
+import { Button, createMuiTheme, ThemeProvider } from '@material-ui/core'
+import { deepOrange, orange } from '@material-ui/core/colors'
 
 const Home = () => {
   useNavigatorConfig({ title: 'Home', noSearch: true })
@@ -111,14 +112,16 @@ const App = () => {
   }, [])
 
   return (
-    <Navigator
-      config={{ title: 'Example' }}
-      menu={menu}
-      routes={routes}
-      userMenu={userMenu}
-      extraIcons={extraIcons}
-      menuDrawerIcon={<FaStar />}
-    />
+    <ThemeProvider theme={createMuiTheme({ palette: { primary: orange } })}>
+      <Navigator
+        config={{ title: 'Example', contrastColor: '#FFF' }}
+        menu={menu}
+        routes={routes}
+        userMenu={userMenu}
+        extraIcons={extraIcons}
+        menuDrawerIcon={<FaStar />}
+      />
+    </ThemeProvider>
   )
 }
 

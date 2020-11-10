@@ -14,7 +14,7 @@ import { useHistory } from 'react-router-dom'
 import { useLang, useNavigator, useNavigatorConfig } from '../utils/NavigatorContext'
 
 export default () => {
-  const { title, onlyTitle, showUser, noSearch, noDrawerMenu } = useNavigatorConfig()
+  const { title, onlyTitle, showUser, noSearch, noDrawerMenu, contrastColor } = useNavigatorConfig()
 
   const {
     menu,
@@ -28,7 +28,7 @@ export default () => {
   } = useNavigator()
 
   const lang = useLang()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth })
+  const classes = useClasses({ drawerWidth: menuDrawerWidth, contrastColor })
   const history = useHistory()
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -82,7 +82,7 @@ export default () => {
             <IconButton
               onClick={() => toggleMenu()}
               edge='start'
-              className={`${classes.menuButton} ${drawer ? classes.hide : ''}`}
+              className={`${classes.menuButton} ${classes.icons} ${drawer ? classes.hide : ''}`}
               color='inherit'
             >
               {menuDrawerIcon || <FaHamburger />}
@@ -131,7 +131,7 @@ export default () => {
           <div>
             {extraIcons?.map(({ tooltip, badgeCount, icon, id, onClick }) => (
               <Tooltip title={tooltip || ''} key={id}>
-                <IconButton onClick={onClick} color='inherit'>
+                <IconButton className={classes.icons} onClick={onClick} color='inherit'>
                   <Badge badgeContent={badgeCount} color='secondary'>
                     {icon}
                   </Badge>
@@ -139,7 +139,12 @@ export default () => {
               </Tooltip>
             ))}
             {!onlyTitle && showUser && (
-              <IconButton edge='end' onClick={handleProfileMenuOpen} color='inherit'>
+              <IconButton
+                edge='end'
+                className={classes.icons}
+                onClick={handleProfileMenuOpen}
+                color='inherit'
+              >
                 {userIcon || <FaUser />}
               </IconButton>
             )}
@@ -175,13 +180,14 @@ const useClasses = makeStyles((theme) => ({
   hide: {
     display: 'none'
   },
-  title: {
+  title: ({ contrastColor }: any) => ({
     display: 'none',
+    color: contrastColor,
     [theme.breakpoints.up('sm')]: {
       display: 'block',
       width: 150
     }
-  },
+  }),
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -220,5 +226,8 @@ const useClasses = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       width: '20ch'
     }
-  }
+  },
+  icons: ({ contrastColor }: any) => ({
+    color: contrastColor
+  })
 }))

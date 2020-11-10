@@ -157,6 +157,7 @@ interface UseNavigatorConfig {
   noDrawerMenu?: boolean
   noSearch?: boolean
   onlyTitle?: boolean // Lo mismo que las 3 de arriba activadas juntas
+  contrastColor?: string
 }
 
 export const useNavigatorConfig = (props?: UseNavigatorConfig) => {
