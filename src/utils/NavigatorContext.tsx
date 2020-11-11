@@ -35,6 +35,7 @@ export interface RouteProps {
   route: string
   component: ReactNode
   hidden?: boolean
+  exact?: boolean
 }
 
 export interface MenuProps {

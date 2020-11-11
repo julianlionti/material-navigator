@@ -33,8 +33,8 @@ export default () => {
           <Switch>
             {routes
               .filter((e) => !e.hidden)
-              .map(({ component, route }) => (
-                <Route key={route} path={route} exact={route === '/'}>
+              .map(({ component, route, exact }) => (
+                <Route key={route} path={route} exact={exact || route === '/'}>
                   {component}
                 </Route>
               ))}
