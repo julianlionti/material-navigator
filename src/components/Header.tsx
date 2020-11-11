@@ -9,12 +9,20 @@ import { fade, makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { Autocomplete } from '@material-ui/lab'
-import { FaHamburger, FaSearch, FaUser } from 'react-icons/fa'
+import { FaArrowLeft, FaHamburger, FaSearch, FaUser } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom'
 import { useLang, useNavigator, useNavigatorConfig } from '../utils/NavigatorContext'
 
 export default () => {
-  const { title, onlyTitle, showUser, noSearch, noDrawerMenu, contrastColor } = useNavigatorConfig()
+  const {
+    title,
+    onlyTitle,
+    showUser,
+    noSearch,
+    noDrawerMenu,
+    contrastColor,
+    goBack
+  } = useNavigatorConfig()
 
   const {
     menu,
@@ -78,14 +86,17 @@ export default () => {
     <div className={classes.grow}>
       <AppBar position='fixed' className={`${classes.appBar} ${drawer ? classes.appBarShift : ''}`}>
         <Toolbar>
-          {!onlyTitle && !noDrawerMenu && (
+          {!onlyTitle && (!noDrawerMenu || goBack) && (
             <IconButton
-              onClick={() => toggleMenu()}
+              onClick={() => {
+                if (goBack) history.goBack()
+                else toggleMenu()
+              }}
               edge='start'
               className={`${classes.menuButton} ${classes.icons} ${drawer ? classes.hide : ''}`}
               color='inherit'
             >
-              {menuDrawerIcon || <FaHamburger />}
+              {goBack ? <FaArrowLeft /> : menuDrawerIcon || <FaHamburger />}
             </IconButton>
           )}
           <Typography className={classes.title} variant='h6' noWrap>

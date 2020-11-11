@@ -36,7 +36,7 @@ const Home = () => {
 }
 
 const AboutUS = () => {
-  useNavigatorConfig({ title: 'About US' })
+  useNavigatorConfig({ title: 'About US', goBack: true })
   const { setExtraIcons } = useNavigator()
   return (
     <div>
