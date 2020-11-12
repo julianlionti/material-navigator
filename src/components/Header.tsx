@@ -21,7 +21,8 @@ export default () => {
     noSearch,
     noDrawerMenu,
     contrastColor,
-    goBack
+    goBack,
+    titleWidth
   } = useNavigatorConfig()
 
   const {
@@ -36,7 +37,7 @@ export default () => {
   } = useNavigator()
 
   const lang = useLang()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth, contrastColor })
+  const classes = useClasses({ drawerWidth: menuDrawerWidth, contrastColor, titleWidth })
   const history = useHistory()
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -191,12 +192,12 @@ const useClasses = makeStyles((theme) => ({
   hide: {
     display: 'none'
   },
-  title: ({ contrastColor }: any) => ({
+  title: ({ contrastColor, titleWidth }: any) => ({
     display: 'none',
     color: contrastColor,
     [theme.breakpoints.up('sm')]: {
       display: 'block',
-      width: 150
+      width: titleWidth || 150
     }
   }),
   search: {
