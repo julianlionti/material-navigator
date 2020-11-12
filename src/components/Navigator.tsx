@@ -1,5 +1,5 @@
-import React from 'react'
-import { CssBaseline, makeStyles } from '@material-ui/core'
+import React, { Suspense } from 'react'
+import { CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import {
   IconsProps,
@@ -29,16 +29,18 @@ export default () => {
         <DrawerMenu />
         <DrawerRight />
         <main className={`${classes.content} ${drawer ? classes.contentShift : ''}`}>
-          <div className={classes.drawerHeader} />
-          <Switch>
-            {routes
-              .filter((e) => !e.hidden)
-              .map(({ component, route, exact }) => (
-                <Route key={route} path={route} exact={exact || route === '/'}>
-                  {component}
-                </Route>
-              ))}
-          </Switch>
+          <Suspense fallback={<CircularProgress />}>
+            <div className={classes.drawerHeader} />
+            <Switch>
+              {routes
+                .filter((e) => !e.hidden)
+                .map(({ component, route, exact }) => (
+                  <Route key={route} path={route} exact={exact || route === '/'}>
+                    {component}
+                  </Route>
+                ))}
+            </Switch>
+          </Suspense>
         </main>
       </div>
     </BrowserRouter>

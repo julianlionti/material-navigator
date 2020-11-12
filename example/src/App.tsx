@@ -1,70 +1,17 @@
-import React, { useEffect, useState } from 'react'
-import { FaBeer, FaCoffee, FaHome, FaInfo, FaStar, FaUser } from 'react-icons/fa'
+import React, { lazy, useEffect, useState } from 'react'
+import { FaBeer, FaHome, FaInfo, FaStar, FaUser } from 'react-icons/fa'
 import {
   Navigator,
   createMenu,
   createUserMenu,
   createRoutes,
-  useNavigatorConfig,
-  createExtraIcons,
-  useNavigator,
-  IconsProps
+  createExtraIcons
 } from 'material-navigator'
-import { Button, createMuiTheme, ThemeProvider } from '@material-ui/core'
-import { deepOrange, orange } from '@material-ui/core/colors'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core'
+import { orange } from '@material-ui/core/colors'
 
-const Home = () => {
-  useNavigatorConfig({ title: 'Home', noSearch: true })
-  const { setRightComponent, toggleRightDrawer } = useNavigator()
-  return (
-    <div>
-      <Button
-        onClick={() => {
-          setRightComponent(() => (
-            <div>
-              <p>Sarasa</p>
-            </div>
-          ))
-          toggleRightDrawer()
-        }}
-      >
-        Agregar componente derecho abrir
-      </Button>
-      <p>Home</p>
-    </div>
-  )
-}
-
-const AboutUS = () => {
-  useNavigatorConfig({ title: 'About US', goBack: true })
-  const { setExtraIcons } = useNavigator()
-  return (
-    <div>
-      <Button
-        onClick={() => {
-          setExtraIcons((extra) => {
-            const final: IconsProps[] = extra
-            if (!final.find((e) => e.id === 'cofee'))
-              final.push({ id: 'cofee', icon: <FaCoffee />, tooltip: 'Café' })
-
-            return final.map((e) => {
-              if (e.id === 'beer') {
-                return {
-                  ...e,
-                  badgeCount: 8
-                }
-              }
-              return e
-            })
-          })
-        }}
-      >
-        Agregar Iconos
-      </Button>
-      <p>AboutUS</p>
-    </div>
-  )
-}
+const Home = lazy(() => import('./screens/Home'))
+const AboutUS = lazy(() => import('./screens/About'))
 
 const User = () => {
   return <p>User</p>
