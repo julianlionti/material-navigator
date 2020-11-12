@@ -65,7 +65,8 @@ const useClasses = makeStyles((theme) => ({
         duration: theme.transitions.duration.leavingScreen
       }),
       marginLeft: 0
-    }
+    },
+    display: 'flex'
   },
   contentShift: ({ drawerWidth }: any) => ({
     marginLeft: 0,
