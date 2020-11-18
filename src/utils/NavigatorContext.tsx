@@ -25,6 +25,7 @@ export interface SharedProps {
   rightDrawerWidth?: number
   rightComponent?: () => ReactNode
   config: UseNavigatorConfig
+  loading?: boolean
 }
 
 interface ProviderProps extends SharedProps {
@@ -73,6 +74,7 @@ type Action =
   | { type: 'RIGHTCOMPONENT'; component: () => ReactNode }
   | { type: 'EXTRAICONS'; extraIcons: IconsProps[] }
   | { type: 'ALL'; data: Partial<State> }
+  | { type: 'LOADING'; loading: boolean }
 
 interface ContextProps {
   state: State
@@ -128,6 +130,8 @@ const reducer = (state: State, action: Action): State => {
       }
     case 'ALL':
       return { ...state, ...action.data }
+    case 'LOADING':
+      return { ...state, loading: action.loading }
     default:
       return state
   }
@@ -227,5 +231,17 @@ export const useNavigator = () => {
     [dispatch]
   )
 
-  return { ...state, toggleMenu, setExtraIcons, setRightComponent, toggleRightDrawer, history }
+  const setLoading = useCallback((loading: boolean) => dispatch({ type: 'LOADING', loading }), [
+    dispatch
+  ])
+
+  return {
+    ...state,
+    toggleMenu,
+    setExtraIcons,
+    setRightComponent,
+    setLoading,
+    toggleRightDrawer,
+    history
+  }
 }

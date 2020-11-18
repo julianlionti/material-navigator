@@ -1,5 +1,5 @@
 import React, { memo, Suspense } from 'react'
-import { CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
+import { Backdrop, CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import {
   IconsProps,
@@ -19,7 +19,7 @@ export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
-  const { routes, drawer, menuDrawerWidth } = useNavigator()
+  const { routes, drawer, menuDrawerWidth, loading } = useNavigator()
   const { noPadding } = useNavigatorConfig()
   const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding })
 
@@ -45,6 +45,9 @@ export default memo(() => {
           </Suspense>
         </main>
       </div>
+      <Backdrop className={classes.backdrop} open={!!loading}>
+        <CircularProgress color='inherit' />
+      </Backdrop>
     </BrowserRouter>
   )
 })
@@ -80,5 +83,9 @@ const useClasses = makeStyles((theme) => ({
       }),
       marginLeft: drawerWidth
     }
-  })
+  }),
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff'
+  }
 }))
