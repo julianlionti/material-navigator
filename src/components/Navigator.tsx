@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { memo, Suspense } from 'react'
 import { CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import {
@@ -17,7 +17,7 @@ export const createUserMenu = (props: UserMenuProps[]) => props
 export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
-export default () => {
+export default memo(() => {
   const { routes, drawer, menuDrawerWidth } = useNavigator()
   const classes = useClasses({ drawerWidth: menuDrawerWidth })
 
@@ -45,7 +45,7 @@ export default () => {
       </div>
     </BrowserRouter>
   )
-}
+})
 
 const useClasses = makeStyles((theme) => ({
   root: {

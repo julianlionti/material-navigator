@@ -137,10 +137,10 @@ export const NavigatorProvider = (props: ProviderProps) => {
   const { children, ...providerProps } = props
   const [state, dispatch] = useReducer(reducer, { ...initialState, ...providerProps })
 
-  const { menu, routes, userMenu } = providerProps
+  const { menu, routes, userMenu, extraIcons } = providerProps
   useEffect(() => {
-    dispatch({ type: 'ALL', data: { menu, routes, userMenu } })
-  }, [menu, routes, userMenu])
+    dispatch({ type: 'ALL', data: { menu, routes, userMenu, extraIcons } })
+  }, [extraIcons, menu, routes, userMenu])
 
   return (
     <NavigatorContext.Provider value={{ state, dispatch }}>{children}</NavigatorContext.Provider>
