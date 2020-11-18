@@ -161,19 +161,39 @@ interface UseNavigatorConfig {
   contrastColor?: string
   goBack?: boolean
   titleWidth?: string | number
+  noPadding?: boolean
 }
 
 export const useNavigatorConfig = (props?: UseNavigatorConfig) => {
   const { state, dispatch } = useContext(NavigatorContext)
-  const { title, noDrawerMenu, noSearch, showUser, onlyTitle, goBack, titleWidth } = props || {}
+  const { title, noDrawerMenu, noSearch, showUser, onlyTitle, goBack, titleWidth, noPadding } =
+    props || {}
 
   useEffect(() => {
-    const config = { title, noDrawerMenu, noSearch, showUser, onlyTitle, goBack, titleWidth }
-    if (title || noDrawerMenu || noSearch || showUser || onlyTitle || goBack || titleWidth) {
+    const config = {
+      title,
+      noDrawerMenu,
+      noSearch,
+      showUser,
+      onlyTitle,
+      goBack,
+      titleWidth,
+      noPadding
+    }
+    if (
+      title ||
+      noDrawerMenu ||
+      noSearch ||
+      showUser ||
+      onlyTitle ||
+      goBack ||
+      titleWidth ||
+      noPadding
+    ) {
       Object.keys(config).forEach((key) => config[key] === undefined && delete config[key])
       dispatch({ type: 'CONFIG', config })
     }
-  }, [title, noDrawerMenu, noSearch, showUser, onlyTitle, dispatch, goBack, titleWidth])
+  }, [title, noDrawerMenu, noSearch, showUser, onlyTitle, dispatch, goBack, titleWidth, noPadding])
 
   return state.config
 }
