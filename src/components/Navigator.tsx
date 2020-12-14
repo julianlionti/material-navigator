@@ -19,9 +19,9 @@ export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
-  const { routes, drawer, menuDrawerWidth, loading } = useNavigator()
+  const { routes, drawer, menuDrawerWidth, loading, maintainIcons } = useNavigator()
   const { noPadding } = useNavigatorConfig()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding })
+  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding, maintainIcons })
 
   return (
     <BrowserRouter>
@@ -63,7 +63,7 @@ const useClasses = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
   },
-  content: ({ noPadding }: any) => ({
+  content: ({ noPadding, maintainIcons }: any) => ({
     flexGrow: 1,
     padding: theme.spacing(noPadding ? 0 : 2),
     [theme.breakpoints.up('sm')]: {
@@ -71,7 +71,7 @@ const useClasses = makeStyles((theme) => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: 0
+      marginLeft: maintainIcons ? theme.spacing(7) + 1 : 0
     }
   }),
   contentShift: ({ drawerWidth }: any) => ({
