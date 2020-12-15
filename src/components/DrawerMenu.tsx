@@ -10,21 +10,14 @@ import {
   makeStyles
 } from '@material-ui/core'
 import { FaChevronLeft } from 'react-icons/fa'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useNavigator } from '../utils/NavigatorContext'
 
 export default () => {
-  const {
-    menuDrawerWidth,
-    drawer,
-    toggleMenu,
-    menu,
-    maintainIcons,
-    setSelectedMenu,
-    selected
-  } = useNavigator()
+  const { menuDrawerWidth, drawer, toggleMenu, menu, maintainIcons } = useNavigator()
   const classes = useClasses({ drawerWidth: menuDrawerWidth, maintainIcons })
   const history = useHistory()
+  const { pathname } = useLocation()
 
   return (
     <Drawer
@@ -49,9 +42,8 @@ export default () => {
               <ListItem
                 button
                 key={title}
-                selected={!selected ? i === 0 : selected === title}
+                selected={pathname === route}
                 onClick={() => {
-                  if (title) setSelectedMenu(title)
                   if (onClick && !route) onClick(history)
                   if (route) history.push(route)
 

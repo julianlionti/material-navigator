@@ -66,7 +66,6 @@ export interface UserMenuProps extends NoRouteMenu {
 interface State extends SharedProps {
   drawer: boolean
   right?: boolean
-  selected?: string
 }
 
 type Action =
@@ -77,7 +76,6 @@ type Action =
   | { type: 'EXTRAICONS'; extraIcons: IconsProps[] }
   | { type: 'ALL'; data: Partial<State> }
   | { type: 'LOADING'; loading: boolean }
-  | { type: 'SELECTED'; selected: string }
 
 interface ContextProps {
   state: State
@@ -135,8 +133,6 @@ const reducer = (state: State, action: Action): State => {
       return { ...state, ...action.data }
     case 'LOADING':
       return { ...state, loading: action.loading }
-    case 'SELECTED':
-      return { ...state, selected: action.selected }
     default:
       return state
   }
@@ -236,11 +232,6 @@ export const useNavigator = () => {
     [dispatch]
   )
 
-  const setSelectedMenu = useCallback(
-    (selected: string) => dispatch({ type: 'SELECTED', selected }),
-    [dispatch]
-  )
-
   const setLoading = useCallback((loading: boolean) => dispatch({ type: 'LOADING', loading }), [
     dispatch
   ])
@@ -252,7 +243,6 @@ export const useNavigator = () => {
     setRightComponent,
     setLoading,
     toggleRightDrawer,
-    setSelectedMenu,
     history
   }
 }
