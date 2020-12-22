@@ -67,7 +67,6 @@ const App = () => {
         userMenu={userMenu}
         extraIcons={extraIcons}
         menuDrawerIcon={<FaStar />}
-        blockUi='bottomRight'
       />
     </ThemeProvider>
   )
