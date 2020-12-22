@@ -69,7 +69,6 @@ const App = () => {
         userMenu={userMenu}
         extraIcons={extraIcons}
         menuDrawerIcon={<FaStar />}
-        blockUi='bottomRight'
         loginPath='/'
       />
     </ThemeProvider>
