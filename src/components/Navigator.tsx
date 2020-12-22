@@ -1,6 +1,6 @@
 import React, { memo, Suspense } from 'react'
 import { Backdrop, CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import {
   IconsProps,
   MenuProps,
@@ -19,9 +19,17 @@ export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
-  const { routes, drawer, menuDrawerWidth, loading, maintainIcons } = useNavigator()
+  const {
+    routes,
+    drawer,
+    menuDrawerWidth,
+    loading,
+    blockUi,
+    loginPath,
+    maintainIcons
+  } = useNavigator()
   const { noPadding } = useNavigatorConfig()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding, maintainIcons })
+  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding, loading, maintainIcons })
 
   return (
     <BrowserRouter>
@@ -34,20 +42,40 @@ export default memo(() => {
           <Suspense fallback={<CircularProgress />}>
             <div className={classes.drawerHeader} />
             <Switch>
-              {routes
-                .filter((e) => !e.hidden)
-                .map(({ component, route, exact }) => (
-                  <Route key={route} path={route} exact={exact || route === '/'}>
-                    {component}
-                  </Route>
-                ))}
+              {routes.map(({ component, route, exact, hidden }) => {
+                return (
+                  <Route
+                    key={route}
+                    path={route}
+                    exact={exact || route === '/'}
+                    render={({ location }) =>
+                      hidden ? (
+                        <Redirect
+                          to={{
+                            pathname: loginPath || '/login',
+                            state: { from: location }
+                          }}
+                        />
+                      ) : (
+                        component
+                      )
+                    }
+                  />
+                )
+              })}
             </Switch>
           </Suspense>
         </main>
       </div>
-      <Backdrop className={classes.backdrop} open={!!loading}>
-        <CircularProgress color='inherit' />
-      </Backdrop>
+      {blockUi === 'bottomRight' ? (
+        <div className={classes.bottomRight}>
+          <CircularProgress color='inherit' />
+        </div>
+      ) : (
+        <Backdrop className={classes.backdrop} open={!!loading}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+      )}
     </BrowserRouter>
   )
 })
@@ -87,5 +115,12 @@ const useClasses = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff'
-  }
+  },
+  bottomRight: ({ loading }: any) => ({
+    display: !loading ? 'none' : 'flex',
+    bottom: 0,
+    right: 0,
+    position: 'fixed',
+    margin: 32
+  })
 }))

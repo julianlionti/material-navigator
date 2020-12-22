@@ -18,6 +18,8 @@ const User = () => {
 }
 
 const App = () => {
+  const [auth, setAuth] = useState(false)
+
   const [menu, setMenu] = useState(
     createMenu([
       { route: '/', title: 'Home', description: 'Home screen', icon: <FaHome size={24} /> },
@@ -33,9 +35,9 @@ const App = () => {
   )
 
   const routes = createRoutes([
-    { route: '/', component: <Home /> },
+    { route: '/', component: <Home setAuth={setAuth} auth={auth} /> },
     { route: '/about', component: <AboutUS /> },
-    { route: '/user', component: <User /> }
+    { route: '/user', component: <User />, hidden: !auth }
   ])
 
   const userMenu = createUserMenu([
@@ -68,6 +70,7 @@ const App = () => {
         extraIcons={extraIcons}
         menuDrawerIcon={<FaStar />}
         maintainIcons
+        loginPath='/'
       />
     </ThemeProvider>
   )
