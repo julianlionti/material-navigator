@@ -9,7 +9,7 @@ import {
   ListItemText,
   makeStyles
 } from '@material-ui/core'
-import { FaChevronLeft } from 'react-icons/fa'
+import { FaChevronLeft, FaHamburger } from 'react-icons/fa'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useNavigator } from '../utils/NavigatorContext'
 
@@ -29,7 +29,7 @@ export default () => {
     >
       <div className={classes.drawerHeader}>
         <IconButton onClick={() => toggleMenu()}>
-          <FaChevronLeft />
+          {drawer ? <FaChevronLeft /> : <FaHamburger />}
         </IconButton>
       </div>
       <Divider />
