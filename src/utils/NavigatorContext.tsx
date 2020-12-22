@@ -26,6 +26,7 @@ export interface SharedProps {
   rightComponent?: () => ReactNode
   config: UseNavigatorConfig
   loading?: boolean
+  blockUi?: 'backdrop' | 'bottomRight'
 }
 
 interface ProviderProps extends SharedProps {

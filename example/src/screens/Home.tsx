@@ -4,7 +4,8 @@ import { useNavigator, useNavigatorConfig } from 'material-navigator'
 
 export default () => {
   useNavigatorConfig({ title: 'Home', noSearch: true })
-  const { setRightComponent, toggleRightDrawer } = useNavigator()
+  const { setRightComponent, toggleRightDrawer, setLoading, loading } = useNavigator()
+
   return (
     <div>
       <Button
@@ -19,6 +20,7 @@ export default () => {
       >
         Agregar componente derecho abrir
       </Button>
+      <Button onClick={() => setLoading(!loading)}>Loading</Button>
       <p>Home</p>
     </div>
   )
