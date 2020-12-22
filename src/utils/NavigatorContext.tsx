@@ -27,6 +27,7 @@ export interface SharedProps {
   config: UseNavigatorConfig
   loading?: boolean
   blockUi?: 'backdrop' | 'bottomRight'
+  loginPath?: string
 }
 
 interface ProviderProps extends SharedProps {
