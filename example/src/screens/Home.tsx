@@ -4,22 +4,27 @@ import { useNavigator, useNavigatorConfig } from 'material-navigator'
 
 export default () => {
   useNavigatorConfig({ title: 'Home', noSearch: true })
-  const { setRightComponent, toggleRightDrawer } = useNavigator()
+  const { setRightComponent, toggleRightDrawer, setLoading, loading } = useNavigator()
+
   return (
     <div>
-      <Button
-        onClick={() => {
-          setRightComponent(() => (
-            <div>
-              <p>Sarasa</p>
-            </div>
-          ))
-          toggleRightDrawer()
-        }}
-      >
-        Agregar componente derecho abrir
-      </Button>
-      <p>Home</p>
+      <div>
+        <Button
+          onClick={() => {
+            setRightComponent(() => (
+              <div>
+                <p>Sarasa</p>
+              </div>
+            ))
+            toggleRightDrawer()
+          }}
+        >
+          Agregar componente derecho abrir
+        </Button>
+        <p>Home</p>
+      </div>
+      <Button onClick={() => setLoading(!loading, 'bottomRight')}>BOTTOM RIGHT</Button>
+      <Button onClick={() => setLoading(!loading)}>BACKDROP</Button>
     </div>
   )
 }

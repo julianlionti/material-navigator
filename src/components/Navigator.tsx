@@ -19,9 +19,9 @@ export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
-  const { routes, drawer, menuDrawerWidth, loading } = useNavigator()
+  const { routes, drawer, menuDrawerWidth, loading, blockUi } = useNavigator()
   const { noPadding } = useNavigatorConfig()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding })
+  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding, loading })
 
   return (
     <BrowserRouter>
@@ -45,9 +45,15 @@ export default memo(() => {
           </Suspense>
         </main>
       </div>
-      <Backdrop className={classes.backdrop} open={!!loading}>
-        <CircularProgress color='inherit' />
-      </Backdrop>
+      {blockUi === 'bottomRight' ? (
+        <div className={classes.bottomRight}>
+          <CircularProgress color='inherit' />
+        </div>
+      ) : (
+        <Backdrop className={classes.backdrop} open={!!loading}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+      )}
     </BrowserRouter>
   )
 })
@@ -87,5 +93,12 @@ const useClasses = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff'
-  }
+  },
+  bottomRight: ({ loading }: any) => ({
+    display: !loading ? 'none' : 'flex',
+    bottom: 0,
+    right: 0,
+    position: 'fixed',
+    margin: 32
+  })
 }))

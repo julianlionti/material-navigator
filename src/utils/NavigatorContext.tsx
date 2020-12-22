@@ -65,6 +65,7 @@ export interface UserMenuProps extends NoRouteMenu {
 interface State extends SharedProps {
   drawer: boolean
   right?: boolean
+  blockUi?: 'backdrop' | 'bottomRight'
 }
 
 type Action =
@@ -74,7 +75,7 @@ type Action =
   | { type: 'RIGHTCOMPONENT'; component: () => ReactNode }
   | { type: 'EXTRAICONS'; extraIcons: IconsProps[] }
   | { type: 'ALL'; data: Partial<State> }
-  | { type: 'LOADING'; loading: boolean }
+  | { type: 'LOADING'; loading: boolean; blockUi: 'backdrop' | 'bottomRight' }
 
 interface ContextProps {
   state: State
@@ -131,7 +132,7 @@ const reducer = (state: State, action: Action): State => {
     case 'ALL':
       return { ...state, ...action.data }
     case 'LOADING':
-      return { ...state, loading: action.loading }
+      return { ...state, loading: action.loading, blockUi: action.blockUi }
     default:
       return state
   }
@@ -231,9 +232,11 @@ export const useNavigator = () => {
     [dispatch]
   )
 
-  const setLoading = useCallback((loading: boolean) => dispatch({ type: 'LOADING', loading }), [
-    dispatch
-  ])
+  const setLoading = useCallback(
+    (loading: boolean, blockUi?: 'backdrop' | 'bottomRight') =>
+      dispatch({ type: 'LOADING', loading, blockUi: blockUi || 'backdrop' }),
+    [dispatch]
+  )
 
   return {
     ...state,
