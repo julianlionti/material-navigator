@@ -26,6 +26,7 @@ export interface SharedProps {
   rightComponent?: () => ReactNode
   config: UseNavigatorConfig
   loading?: boolean
+  loginPath?: string
 }
 
 interface ProviderProps extends SharedProps {
