@@ -1,4 +1,4 @@
-import React, { memo, Suspense } from 'react'
+import React, { memo, Suspense, useCallback } from 'react'
 import { Backdrop, CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import {
@@ -28,19 +28,36 @@ export default memo(() => {
     loginPath,
     maintainIcons
   } = useNavigator()
-  const { noPadding } = useNavigatorConfig()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding, loading, maintainIcons })
+  const { noPadding, onlyContent } = useNavigatorConfig()
+  const classes = useClasses({
+    drawerWidth: menuDrawerWidth,
+    noPadding,
+    loading,
+    maintainIcons,
+    onlyContent
+  })
+
+  const renderMenus = useCallback(() => {
+    console.log(onlyContent)
+    if (onlyContent) return null
+
+    return (
+      <React.Fragment>
+        <Header />
+        <DrawerMenu />
+        <DrawerRight />
+      </React.Fragment>
+    )
+  }, [onlyContent])
 
   return (
     <BrowserRouter>
       <div className={classes.root}>
         <CssBaseline />
-        <Header />
-        <DrawerMenu />
-        <DrawerRight />
+        {renderMenus()}
         <main className={`${classes.content} ${drawer ? classes.contentShift : ''}`}>
           <Suspense fallback={<CircularProgress />}>
-            <div className={classes.drawerHeader} />
+            {!onlyContent && <div className={classes.drawerHeader} />}
             <Switch>
               {routes.map(({ component, route, exact, hidden }) => {
                 return (
@@ -84,22 +101,22 @@ const useClasses = makeStyles((theme) => ({
   root: {
     flex: 1
   },
-  drawerHeader: {
+  drawerHeader: ({ onlyContent }: any) => ({
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0, onlyContent ? 0 : 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
-  },
-  content: ({ noPadding, maintainIcons }: any) => ({
+  }),
+  content: ({ noPadding, maintainIcons, onlyContent }: any) => ({
     flexGrow: 1,
-    padding: theme.spacing(noPadding ? 0 : 2),
+    padding: theme.spacing(noPadding || onlyContent ? 0 : 2),
     [theme.breakpoints.up('sm')]: {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: maintainIcons ? theme.spacing(7) + 1 : 0
+      marginLeft: onlyContent ? theme.spacing(1) : maintainIcons ? theme.spacing(7) + 1 : 0
     }
   }),
   contentShift: ({ drawerWidth }: any) => ({
