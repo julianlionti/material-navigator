@@ -26,6 +26,7 @@ export interface SharedProps {
   rightComponent?: () => ReactNode
   config: UseNavigatorConfig
   loading?: boolean
+  maintainIcons?: boolean
   loginPath?: string
 }
 
@@ -168,12 +169,22 @@ interface UseNavigatorConfig {
   goBack?: boolean
   titleWidth?: string | number
   noPadding?: boolean
+  onlyContent?: boolean
 }
 
 export const useNavigatorConfig = (props?: UseNavigatorConfig) => {
   const { state, dispatch } = useContext(NavigatorContext)
-  const { title, noDrawerMenu, noSearch, showUser, onlyTitle, goBack, titleWidth, noPadding } =
-    props || {}
+  const {
+    title,
+    noDrawerMenu,
+    noSearch,
+    showUser,
+    onlyTitle,
+    goBack,
+    titleWidth,
+    noPadding,
+    onlyContent
+  } = props || {}
 
   useEffect(() => {
     const config = {
@@ -184,7 +195,8 @@ export const useNavigatorConfig = (props?: UseNavigatorConfig) => {
       onlyTitle,
       goBack,
       titleWidth,
-      noPadding
+      noPadding,
+      onlyContent
     }
     if (
       title ||
@@ -194,12 +206,24 @@ export const useNavigatorConfig = (props?: UseNavigatorConfig) => {
       onlyTitle ||
       goBack ||
       titleWidth ||
-      noPadding
+      noPadding ||
+      onlyContent
     ) {
       Object.keys(config).forEach((key) => config[key] === undefined && delete config[key])
       dispatch({ type: 'CONFIG', config })
     }
-  }, [title, noDrawerMenu, noSearch, showUser, onlyTitle, dispatch, goBack, titleWidth, noPadding])
+  }, [
+    title,
+    noDrawerMenu,
+    noSearch,
+    showUser,
+    onlyTitle,
+    dispatch,
+    goBack,
+    titleWidth,
+    noPadding,
+    onlyContent
+  ])
 
   return state.config
 }

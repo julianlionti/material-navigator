@@ -9,25 +9,27 @@ import {
   ListItemText,
   makeStyles
 } from '@material-ui/core'
-import { FaChevronLeft } from 'react-icons/fa'
-import { useHistory } from 'react-router-dom'
+import { FaChevronLeft, FaHamburger } from 'react-icons/fa'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useNavigator } from '../utils/NavigatorContext'
 
 export default () => {
-  const { menuDrawerWidth, drawer, toggleMenu, menu } = useNavigator()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth })
+  const { menuDrawerWidth, drawer, toggleMenu, menu, maintainIcons } = useNavigator()
+  const classes = useClasses({ drawerWidth: menuDrawerWidth, maintainIcons })
   const history = useHistory()
+  const { pathname } = useLocation()
+
   return (
     <Drawer
-      className={classes.drawer}
-      variant='persistent'
+      className={`${classes.drawer} ${drawer ? classes.drawerOpen : classes.drawerClose}`}
+      variant={maintainIcons ? 'permanent' : 'persistent'}
       anchor='left'
       open={drawer}
-      classes={{ paper: classes.drawerPaper }}
+      classes={{ paper: `${drawer ? classes.drawerOpen : classes.drawerClose}` }}
     >
       <div className={classes.drawerHeader}>
         <IconButton onClick={() => toggleMenu()}>
-          <FaChevronLeft />
+          {drawer ? <FaChevronLeft /> : <FaHamburger />}
         </IconButton>
       </div>
       <Divider />
@@ -40,11 +42,12 @@ export default () => {
               <ListItem
                 button
                 key={title}
+                selected={pathname === route}
                 onClick={() => {
                   if (onClick && !route) onClick(history)
                   if (route) history.push(route)
 
-                  toggleMenu(false)
+                  if (!maintainIcons) toggleMenu(false)
                 }}
               >
                 {icon && <ListItemIcon>{icon}</ListItemIcon>}
@@ -63,19 +66,38 @@ const useClasses = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth
     },
-    width: '100%'
+    width: '100%',
+    whiteSpace: 'nowrap'
   }),
-  drawerPaper: ({ drawerWidth }: any) => ({
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth
-    },
-    width: '100%'
-  }),
+  // drawerPaper: ({ drawerWidth }: any) => ({
+  //   [theme.breakpoints.up('sm')]: {
+  //     width: drawerWidth
+  //   },
+  //   width: '100%'
+  // }),
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
+  },
+  drawerOpen: ({ drawerWidth }: any) => ({
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  }),
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(5) + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(7) + 1
+    }
   }
 }))

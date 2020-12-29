@@ -1,4 +1,4 @@
-import React, { memo, Suspense } from 'react'
+import React, { memo, Suspense, useCallback } from 'react'
 import { Backdrop, CircularProgress, CssBaseline, makeStyles } from '@material-ui/core'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import {
@@ -19,20 +19,62 @@ export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
-  const { routes, drawer, menuDrawerWidth, loading, blockUi, loginPath } = useNavigator()
-  const { noPadding } = useNavigatorConfig()
-  const classes = useClasses({ drawerWidth: menuDrawerWidth, noPadding, loading })
+  const {
+    routes,
+    drawer,
+    menuDrawerWidth,
+    loading,
+    blockUi,
+    loginPath,
+    maintainIcons
+  } = useNavigator()
+  const { noPadding, onlyContent } = useNavigatorConfig()
+  const classes = useClasses({
+    drawerWidth: menuDrawerWidth,
+    noPadding,
+    loading,
+    maintainIcons,
+    onlyContent
+  })
+
+  const renderMenus = useCallback(() => {
+    if (onlyContent) return null
+
+    return (
+      <React.Fragment>
+        <Header />
+        <DrawerMenu />
+        <DrawerRight />
+      </React.Fragment>
+    )
+  }, [onlyContent])
+
+  const renderLoading = useCallback(() => {
+    if (!loading) return null
+    if (blockUi === 'bottomRight')
+      return (
+        <div className={classes.bottomRight}>
+          <CircularProgress color='inherit' />
+        </div>
+      )
+    else
+      return (
+        <Backdrop className={classes.backdrop} open={!!loading}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+      )
+  }, [blockUi, classes.backdrop, classes.bottomRight, loading])
 
   return (
     <BrowserRouter>
       <div className={classes.root}>
         <CssBaseline />
-        <Header />
-        <DrawerMenu />
-        <DrawerRight />
-        <main className={`${classes.content} ${drawer ? classes.contentShift : ''}`}>
+        {renderMenus()}
+        <main
+          className={`${classes.content} ${drawer && !onlyContent ? classes.contentShift : ''}`}
+        >
           <Suspense fallback={<CircularProgress />}>
-            <div className={classes.drawerHeader} />
+            {!onlyContent && <div className={classes.drawerHeader} />}
             <Switch>
               {routes.map(({ component, route, exact, hidden }) => {
                 return (
@@ -59,15 +101,7 @@ export default memo(() => {
           </Suspense>
         </main>
       </div>
-      {blockUi === 'bottomRight' ? (
-        <div className={classes.bottomRight}>
-          <CircularProgress color='inherit' />
-        </div>
-      ) : (
-        <Backdrop className={classes.backdrop} open={!!loading}>
-          <CircularProgress color='inherit' />
-        </Backdrop>
-      )}
+      {renderLoading()}
     </BrowserRouter>
   )
 })
@@ -76,22 +110,22 @@ const useClasses = makeStyles((theme) => ({
   root: {
     flex: 1
   },
-  drawerHeader: {
+  drawerHeader: ({ onlyContent }: any) => ({
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
+    padding: theme.spacing(0, onlyContent ? 0 : 1),
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
-  },
-  content: ({ noPadding }: any) => ({
+  }),
+  content: ({ noPadding, maintainIcons, onlyContent }: any) => ({
     flexGrow: 1,
-    padding: theme.spacing(noPadding ? 0 : 2),
+    padding: theme.spacing(noPadding || onlyContent ? 0 : 2),
     [theme.breakpoints.up('sm')]: {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: 0
+      marginLeft: maintainIcons && !onlyContent ? theme.spacing(7) + 1 : 0
     }
   }),
   contentShift: ({ drawerWidth }: any) => ({

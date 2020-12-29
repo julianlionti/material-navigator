@@ -69,6 +69,7 @@ const App = () => {
         userMenu={userMenu}
         extraIcons={extraIcons}
         menuDrawerIcon={<FaStar />}
+        maintainIcons
         loginPath='/'
       />
     </ThemeProvider>

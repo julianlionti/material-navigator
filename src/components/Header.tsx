@@ -173,6 +173,7 @@ const useClasses = makeStyles((theme) => ({
     flexGrow: 1
   },
   appBar: {
+    // zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
