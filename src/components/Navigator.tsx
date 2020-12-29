@@ -38,7 +38,6 @@ export default memo(() => {
   })
 
   const renderMenus = useCallback(() => {
-    console.log(onlyContent)
     if (onlyContent) return null
 
     return (
@@ -50,12 +49,30 @@ export default memo(() => {
     )
   }, [onlyContent])
 
+  const renderLoading = useCallback(() => {
+    if (!loading) return null
+    if (blockUi === 'bottomRight')
+      return (
+        <div className={classes.bottomRight}>
+          <CircularProgress color='inherit' />
+        </div>
+      )
+    else
+      return (
+        <Backdrop className={classes.backdrop} open={!!loading}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+      )
+  }, [blockUi, classes.backdrop, classes.bottomRight, loading])
+
   return (
     <BrowserRouter>
       <div className={classes.root}>
         <CssBaseline />
         {renderMenus()}
-        <main className={`${classes.content} ${drawer ? classes.contentShift : ''}`}>
+        <main
+          className={`${classes.content} ${drawer && !onlyContent ? classes.contentShift : ''}`}
+        >
           <Suspense fallback={<CircularProgress />}>
             {!onlyContent && <div className={classes.drawerHeader} />}
             <Switch>
@@ -84,15 +101,7 @@ export default memo(() => {
           </Suspense>
         </main>
       </div>
-      {blockUi === 'bottomRight' ? (
-        <div className={classes.bottomRight}>
-          <CircularProgress color='inherit' />
-        </div>
-      ) : (
-        <Backdrop className={classes.backdrop} open={!!loading}>
-          <CircularProgress color='inherit' />
-        </Backdrop>
-      )}
+      {renderLoading()}
     </BrowserRouter>
   )
 })
@@ -116,7 +125,7 @@ const useClasses = makeStyles((theme) => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: onlyContent ? theme.spacing(1) : maintainIcons ? theme.spacing(7) + 1 : 0
+      marginLeft: maintainIcons && !onlyContent ? theme.spacing(7) + 1 : 0
     }
   }),
   contentShift: ({ drawerWidth }: any) => ({
