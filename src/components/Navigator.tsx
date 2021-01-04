@@ -37,6 +37,7 @@ export default memo(() => {
     onlyContent
   })
 
+  console.log(onlyContent)
   const renderMenus = useCallback(() => {
     if (onlyContent) return null
 
@@ -71,7 +72,9 @@ export default memo(() => {
         <CssBaseline />
         {renderMenus()}
         <main
-          className={`${classes.content} ${drawer && !onlyContent ? classes.contentShift : ''}`}
+          className={`${onlyContent ? '' : classes.content} ${
+            drawer && !onlyContent ? classes.contentShift : ''
+          }`}
         >
           <Suspense fallback={<CircularProgress />}>
             {!onlyContent && <div className={classes.drawerHeader} />}
@@ -125,7 +128,8 @@ const useClasses = makeStyles((theme) => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: maintainIcons && !onlyContent ? theme.spacing(7) + 1 : 0
+      marginLeft: onlyContent ? 0 : maintainIcons ? theme.spacing(7) + 1 : 0
+      // marginLeft: maintainIcons && !onlyContent?  theme.spacing(7) + 1 : 0
     }
   }),
   contentShift: ({ drawerWidth }: any) => ({

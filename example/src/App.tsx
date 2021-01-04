@@ -9,6 +9,7 @@ import {
 } from 'material-navigator'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { orange } from '@material-ui/core/colors'
+import Fuerta from './screens/Fuerta'
 
 const Home = lazy(() => import('./screens/Home'))
 const AboutUS = lazy(() => import('./screens/About'))
@@ -37,7 +38,8 @@ const App = () => {
   const routes = createRoutes([
     { route: '/', component: <Home setAuth={setAuth} auth={auth} /> },
     { route: '/about', component: <AboutUS /> },
-    { route: '/user', component: <User />, hidden: !auth }
+    { route: '/user', component: <User />, hidden: !auth },
+    { route: '/fuera', component: <Fuerta />, hidden: false }
   ])
 
   const userMenu = createUserMenu([
