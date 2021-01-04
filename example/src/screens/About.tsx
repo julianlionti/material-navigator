@@ -4,7 +4,7 @@ import { IconsProps, useNavigator, useNavigatorConfig } from 'material-navigator
 import { FaCoffee } from 'react-icons/fa'
 
 export default () => {
-  useNavigatorConfig({ onlyContent: true })
+  useNavigatorConfig({ noDrawerMenu: true })
 
   const { setExtraIcons } = useNavigator()
   return (

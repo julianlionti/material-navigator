@@ -28,7 +28,7 @@ export default memo(() => {
     loginPath,
     maintainIcons
   } = useNavigator()
-  const { noPadding, onlyContent } = useNavigatorConfig()
+  const { noPadding, onlyContent, noDrawerMenu } = useNavigatorConfig()
   const classes = useClasses({
     drawerWidth: menuDrawerWidth,
     noPadding,
@@ -43,11 +43,11 @@ export default memo(() => {
     return (
       <React.Fragment>
         <Header />
-        <DrawerMenu />
+        {!noDrawerMenu && <DrawerMenu />}
         <DrawerRight />
       </React.Fragment>
     )
-  }, [onlyContent])
+  }, [noDrawerMenu, onlyContent])
 
   const renderLoading = useCallback(() => {
     if (!loading) return null
