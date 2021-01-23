@@ -13,9 +13,9 @@ import DrawerMenu from './DrawerMenu'
 import DrawerRight from './DrawerRight'
 import Header from './Header'
 
-export const createMenu = (props: MenuProps[]) => props
-export const createUserMenu = (props: UserMenuProps[]) => props
 export const createRoutes = (props: RouteProps[]) => props
+export const createMenu = <T extends string = string>(props: MenuProps<T>[]) => props
+export const createUserMenu = (props: UserMenuProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
@@ -37,7 +37,6 @@ export default memo(() => {
     onlyContent
   })
 
-  console.log(onlyContent)
   const renderMenus = useCallback(() => {
     if (onlyContent) return null
 

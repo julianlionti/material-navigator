@@ -41,8 +41,8 @@ export interface RouteProps {
   exact?: boolean
 }
 
-export interface MenuProps {
-  route?: string
+export interface MenuProps<T> {
+  route?: T
   title?: string
   icon?: ReactNode
   description?: string
