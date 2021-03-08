@@ -13,9 +13,9 @@ import DrawerMenu from './DrawerMenu'
 import DrawerRight from './DrawerRight'
 import Header from './Header'
 
-export const createMenu = (props: MenuProps[]) => props
+export const createRoutes = <T extends string = string>(props: RouteProps<T>[]) => props
+export const createMenu = <T extends string = string>(props: MenuProps<T>[]) => props
 export const createUserMenu = (props: UserMenuProps[]) => props
-export const createRoutes = (props: RouteProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
 
 export default memo(() => {
@@ -71,7 +71,9 @@ export default memo(() => {
         <CssBaseline />
         {renderMenus()}
         <main
-          className={`${classes.content} ${drawer && !onlyContent ? classes.contentShift : ''}`}
+          className={`${onlyContent ? '' : classes.content} ${
+            drawer && !onlyContent ? classes.contentShift : ''
+          }`}
         >
           <Suspense fallback={<CircularProgress />}>
             {!onlyContent && <div className={classes.drawerHeader} />}
@@ -125,7 +127,8 @@ const useClasses = makeStyles((theme) => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      marginLeft: maintainIcons && !onlyContent ? theme.spacing(7) + 1 : 0
+      marginLeft: onlyContent ? 0 : maintainIcons ? theme.spacing(7) + 1 : 0
+      // marginLeft: maintainIcons && !onlyContent?  theme.spacing(7) + 1 : 0
     }
   }),
   contentShift: ({ drawerWidth }: any) => ({
@@ -139,7 +142,7 @@ const useClasses = makeStyles((theme) => ({
     }
   }),
   backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: 9999,
     color: '#fff'
   },
   bottomRight: ({ loading }: any) => ({

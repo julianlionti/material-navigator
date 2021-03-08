@@ -4,7 +4,7 @@ import { IconsProps, useNavigator, useNavigatorConfig } from 'material-navigator
 import { FaCoffee } from 'react-icons/fa'
 
 export default () => {
-  useNavigatorConfig({ noDrawerMenu: true })
+  useNavigatorConfig({ noDrawerMenu: false, onlyContent: false })
 
   const { setExtraIcons } = useNavigator()
   return (
@@ -29,6 +29,13 @@ export default () => {
         }}
       >
         Agregar Iconos
+      </Button>
+      <Button
+        onClick={() => {
+          window.open(window.location.origin + '/fuera', '_blank', 'height=600,width=1200')
+        }}
+      >
+        Fuera
       </Button>
       <p>AboutUS</p>
     </div>
