@@ -13,7 +13,7 @@ import DrawerMenu from './DrawerMenu'
 import DrawerRight from './DrawerRight'
 import Header from './Header'
 
-export const createRoutes = (props: RouteProps[]) => props
+export const createRoutes = <T extends string = string>(props: RouteProps<T>[]) => props
 export const createMenu = <T extends string = string>(props: MenuProps<T>[]) => props
 export const createUserMenu = (props: UserMenuProps[]) => props
 export const createExtraIcons = (props: IconsProps[]) => props
@@ -142,7 +142,7 @@ const useClasses = makeStyles((theme) => ({
     }
   }),
   backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: 9999,
     color: '#fff'
   },
   bottomRight: ({ loading }: any) => ({

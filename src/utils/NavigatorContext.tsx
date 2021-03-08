@@ -34,14 +34,14 @@ interface ProviderProps extends SharedProps {
   children: ReactNode
 }
 
-export interface RouteProps {
-  route: string
+export interface RouteProps<T = string> {
+  route: T
   component: ReactNode
   hidden?: boolean
   exact?: boolean
 }
 
-export interface MenuProps<T> {
+export interface MenuProps<T = string> {
   route?: T
   title?: string
   icon?: ReactNode
