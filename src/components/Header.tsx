@@ -33,7 +33,8 @@ export default () => {
     menuDrawerIcon,
     userMenu,
     userIcon,
-    extraIcons
+    extraIcons,
+    maintainIcons
   } = useNavigator()
 
   const lang = useLang()
@@ -97,7 +98,13 @@ export default () => {
               className={`${classes.menuButton} ${classes.icons} ${drawer ? classes.hide : ''}`}
               color='inherit'
             >
-              {goBack ? <FaArrowLeft /> : menuDrawerIcon || <FaHamburger />}
+              {maintainIcons ? (
+                <div style={{ width: 32 }} />
+              ) : goBack ? (
+                <FaArrowLeft />
+              ) : (
+                menuDrawerIcon || <FaHamburger />
+              )}
             </IconButton>
           )}
           <Typography className={classes.title} variant='h6' noWrap>
