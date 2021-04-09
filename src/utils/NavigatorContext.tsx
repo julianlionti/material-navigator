@@ -22,6 +22,7 @@ export interface SharedProps {
   extraIcons?: IconsProps[]
   menuDrawerWidth?: number
   menuDrawerIcon?: ReactNode
+  menuDrawerHeader?: ReactNode
   rightDrawerWidth?: number
   rightComponent?: () => ReactNode
   config: UseNavigatorConfig
