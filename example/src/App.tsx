@@ -1,4 +1,4 @@
-import React, { lazy, useEffect, useState } from 'react'
+import React, { lazy, useMemo, useState } from 'react'
 import { FaBeer, FaHome, FaInfo, FaStar, FaUser } from 'react-icons/fa'
 import {
   Navigator,
@@ -56,6 +56,15 @@ const App = () => {
     }
   ])
 
+  const renderMenuDrawerHeader = useMemo(() => {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FaStar />
+        <p>User</p>
+      </div>
+    )
+  }, [])
+
   // useEffect(() => {
   //   setTimeout(() => {
   //     setMenu((menu) => [...menu, { route: '/sarasa', title: 'sarasa' }])
@@ -71,6 +80,7 @@ const App = () => {
         userMenu={userMenu}
         extraIcons={extraIcons}
         menuDrawerIcon={<FaStar />}
+        // menuDrawerHeader={renderMenuDrawerHeader}
         maintainIcons
         loginPath='/'
       />

@@ -20,7 +20,8 @@ export default () => {
     toggleMenu,
     menu,
     maintainIcons,
-    menuDrawerIcon
+    menuDrawerIcon,
+    menuDrawerHeader
   } = useNavigator()
   const classes = useClasses({ drawerWidth: menuDrawerWidth, maintainIcons })
   const history = useHistory()
@@ -35,6 +36,7 @@ export default () => {
       classes={{ paper: `${drawer ? classes.drawerOpen : classes.drawerClose}` }}
     >
       <div className={classes.drawerHeader}>
+        {drawer && <div className={classes.drawerHeaderContainer}>{menuDrawerHeader}</div>}
         <IconButton onClick={() => toggleMenu()}>
           {drawer ? <FaChevronLeft /> : menuDrawerIcon || <FaHamburger />}
         </IconButton>
@@ -86,8 +88,11 @@ const useClasses = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar,
-    justifyContent: 'flex-end'
+    ...theme.mixins.toolbar
+    // justifyContent: 'flex-end'
+  },
+  drawerHeaderContainer: {
+    flex: 1
   },
   drawerOpen: ({ drawerWidth }: any) => ({
     width: drawerWidth,
