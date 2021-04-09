@@ -14,7 +14,14 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { useNavigator } from '../utils/NavigatorContext'
 
 export default () => {
-  const { menuDrawerWidth, drawer, toggleMenu, menu, maintainIcons } = useNavigator()
+  const {
+    menuDrawerWidth,
+    drawer,
+    toggleMenu,
+    menu,
+    maintainIcons,
+    menuDrawerIcon
+  } = useNavigator()
   const classes = useClasses({ drawerWidth: menuDrawerWidth, maintainIcons })
   const history = useHistory()
   const { pathname } = useLocation()
@@ -29,7 +36,7 @@ export default () => {
     >
       <div className={classes.drawerHeader}>
         <IconButton onClick={() => toggleMenu()}>
-          {drawer ? <FaChevronLeft /> : <FaHamburger />}
+          {drawer ? <FaChevronLeft /> : menuDrawerIcon || <FaHamburger />}
         </IconButton>
       </div>
       <Divider />

@@ -56,11 +56,11 @@ const App = () => {
     }
   ])
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMenu((menu) => [...menu, { route: '/sarasa', title: 'sarasa' }])
-    }, 1500)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setMenu((menu) => [...menu, { route: '/sarasa', title: 'sarasa' }])
+  //   }, 1500)
+  // }, [])
 
   return (
     <ThemeProvider theme={createMuiTheme({ palette: { primary: orange } })}>
