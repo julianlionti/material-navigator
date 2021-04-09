@@ -87,7 +87,7 @@ const useClasses = makeStyles((theme) => ({
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
+    // padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar
     // justifyContent: 'flex-end'
   },

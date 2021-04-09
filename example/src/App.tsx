@@ -10,6 +10,7 @@ import {
 import { createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { orange } from '@material-ui/core/colors'
 import Fuerta from './screens/Fuerta'
+import { ReactComponent as Logo } from './assets/logo.svg'
 
 const Home = lazy(() => import('./screens/Home'))
 const AboutUS = lazy(() => import('./screens/About'))
@@ -79,7 +80,8 @@ const App = () => {
         routes={routes}
         userMenu={userMenu}
         extraIcons={extraIcons}
-        menuDrawerIcon={<FaStar />}
+        // menuDrawerIcon={<FaH />}
+        // menuDrawerIcon={<Logo height={40} />}
         // menuDrawerHeader={renderMenuDrawerHeader}
         maintainIcons
         loginPath='/'
