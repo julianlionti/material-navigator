@@ -26,7 +26,8 @@ export default memo(() => {
     loading,
     blockUi,
     loginPath,
-    maintainIcons
+    maintainIcons,
+    multipleRoutesComponent
   } = useNavigator()
   const { noPadding, onlyContent, noDrawerMenu } = useNavigatorConfig()
   const classes = useClasses({
@@ -84,7 +85,7 @@ export default memo(() => {
                     key={route}
                     path={route}
                     exact={exact || route === '/'}
-                    render={({ location }) =>
+                    render={({ location, history }) =>
                       hidden ? (
                         <Redirect
                           to={{
@@ -93,7 +94,10 @@ export default memo(() => {
                           }}
                         />
                       ) : (
-                        component
+                        <React.Fragment>
+                          {component}
+                          {multipleRoutesComponent && multipleRoutesComponent(history)}
+                        </React.Fragment>
                       )
                     }
                   />

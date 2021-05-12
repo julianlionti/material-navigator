@@ -30,6 +30,7 @@ export interface SharedProps {
   maintainIcons?: boolean
   loginPath?: string
   blockUi?: 'backdrop' | 'bottomRight'
+  multipleRoutesComponent?: (history: any) => ReactNode
 }
 
 interface ProviderProps extends SharedProps {
