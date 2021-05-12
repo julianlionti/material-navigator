@@ -80,6 +80,7 @@ const App = () => {
         routes={routes}
         userMenu={userMenu}
         extraIcons={extraIcons}
+        // blockUi='bottomRight'
         // menuDrawerIcon={<FaH />}
         // menuDrawerIcon={<Logo height={40} />}
         // menuDrawerHeader={renderMenuDrawerHeader}
