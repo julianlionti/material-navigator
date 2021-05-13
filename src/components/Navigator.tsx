@@ -66,14 +66,6 @@ export default memo(() => {
       )
   }, [blockUi, classes.backdrop, classes.bottomRight, loading])
 
-  const renderMultipleRoutesComponent = useCallback(
-    (history) => {
-      if (!multipleRoutesComponent) return null
-      else return multipleRoutesComponent(history)
-    },
-    [multipleRoutesComponent]
-  )
-
   return (
     <BrowserRouter>
       <div className={classes.root}>
@@ -104,7 +96,7 @@ export default memo(() => {
                       ) : (
                         <React.Fragment>
                           {component}
-                          {renderMultipleRoutesComponent(history)}
+                          {multipleRoutesComponent && multipleRoutesComponent(history)}
                         </React.Fragment>
                       )
                     }
