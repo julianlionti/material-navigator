@@ -29,6 +29,8 @@ export interface SharedProps {
   loading?: boolean
   maintainIcons?: boolean
   loginPath?: string
+  blockUi?: 'backdrop' | 'bottomRight'
+  multipleRoutesComponent?: (history: any) => ReactNode
 }
 
 interface ProviderProps extends SharedProps {
@@ -68,7 +70,6 @@ export interface UserMenuProps extends NoRouteMenu {
 interface State extends SharedProps {
   drawer: boolean
   right?: boolean
-  blockUi?: 'backdrop' | 'bottomRight'
 }
 
 type Action =
@@ -260,8 +261,8 @@ export const useNavigator = () => {
 
   const setLoading = useCallback(
     (loading: boolean, blockUi?: 'backdrop' | 'bottomRight') =>
-      dispatch({ type: 'LOADING', loading, blockUi: blockUi || 'backdrop' }),
-    [dispatch]
+      dispatch({ type: 'LOADING', loading, blockUi: blockUi || state.blockUi || 'backdrop' }),
+    [dispatch, state.blockUi]
   )
 
   return {

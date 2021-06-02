@@ -23,8 +23,8 @@ export default ({ setAuth, auth }: any) => {
         </Button>
         <p>Home</p>
       </div>
-      <Button onClick={() => setLoading(!loading, 'bottomRight')}>BOTTOM RIGHT</Button>
-      <Button onClick={() => setLoading(!loading)}>BACKDROP</Button>
+      <Button onClick={() => setLoading(!loading)}>BOTTOM RIGHT</Button>
+      <Button onClick={() => setLoading(!loading, 'backdrop')}>BACKDROP</Button>
       <Button onClick={() => setAuth(!auth)}>Auth</Button>
     </div>
   )

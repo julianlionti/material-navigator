@@ -11,6 +11,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core'
 import { orange } from '@material-ui/core/colors'
 import Fuerta from './screens/Fuerta'
 import { ReactComponent as Logo } from './assets/logo.svg'
+import { isTemplateTail } from 'typescript'
 
 const Home = lazy(() => import('./screens/Home'))
 const AboutUS = lazy(() => import('./screens/About'))
@@ -80,11 +81,22 @@ const App = () => {
         routes={routes}
         userMenu={userMenu}
         extraIcons={extraIcons}
+        blockUi='bottomRight'
         // menuDrawerIcon={<FaH />}
         // menuDrawerIcon={<Logo height={40} />}
         // menuDrawerHeader={renderMenuDrawerHeader}
         maintainIcons
         loginPath='/'
+        multipleRoutesComponent={(history) =>
+          history.location.pathname !== '/' && (
+            <button
+              style={{ position: 'absolute', top: 90, right: 15 }}
+              onClick={() => console.log(history)}
+            >
+              SIEMPRE EN DOM
+            </button>
+          )
+        }
       />
     </ThemeProvider>
   )
