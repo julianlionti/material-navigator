@@ -12,6 +12,7 @@ import { orange } from '@material-ui/core/colors'
 import Fuerta from './screens/Fuerta'
 import { ReactComponent as Logo } from './assets/logo.svg'
 import { isTemplateTail } from 'typescript'
+import HeaderMenu from './components/HeaderMenu'
 
 const Home = lazy(() => import('./screens/Home'))
 const AboutUS = lazy(() => import('./screens/About'))
@@ -80,6 +81,7 @@ const App = () => {
         menu={menu}
         routes={routes}
         userMenu={userMenu}
+        menuDrawerHeader={<HeaderMenu />}
         extraIcons={extraIcons}
         blockUi='bottomRight'
         // menuDrawerIcon={<FaH />}

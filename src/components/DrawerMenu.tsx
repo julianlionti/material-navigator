@@ -35,14 +35,18 @@ export default () => {
       open={drawer}
       classes={{ paper: `${drawer ? classes.drawerOpen : classes.drawerClose}` }}
     >
-      <div className={classes.drawerHeader}>
-        {drawer && <div className={classes.drawerHeaderContainer}>{menuDrawerHeader}</div>}
-        <IconButton onClick={() => toggleMenu()}>
-          {drawer ? <FaChevronLeft /> : menuDrawerIcon || <FaHamburger />}
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
+      <List
+        subheader={
+          <div className={classes.drawerHeader}>
+            {drawer && <div className={classes.drawerHeaderContainer}>{menuDrawerHeader}</div>}
+            <div className={classes.menuIcon}>
+              <IconButton onClick={() => toggleMenu()}>
+                {drawer ? <FaChevronLeft /> : menuDrawerIcon || <FaHamburger />}
+              </IconButton>
+            </div>
+          </div>
+        }
+      >
         {menu
           .filter((e) => !e.hidden)
           .map(({ route, title, icon, onClick }, i) => {
@@ -78,15 +82,9 @@ const useClasses = makeStyles((theme) => ({
     width: '100%',
     whiteSpace: 'nowrap'
   }),
-  // drawerPaper: ({ drawerWidth }: any) => ({
-  //   [theme.breakpoints.up('sm')]: {
-  //     width: drawerWidth
-  //   },
-  //   width: '100%'
-  // }),
   drawerHeader: {
     display: 'flex',
-    alignItems: 'center',
+    // alignItems: 'sta',º
     // padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar
     // justifyContent: 'flex-end'
@@ -111,5 +109,8 @@ const useClasses = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(7) + 1
     }
+  },
+  menuIcon: {
+    paddingTop: theme.spacing(1)
   }
 }))
